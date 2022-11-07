@@ -76,3 +76,4 @@ hist(CEP$confianza_6_d)
 hist(CEP$confianza_6_h)
 hist(CEP$confianza_6_i)
 hist(CEP$confianza_6_k)
+
