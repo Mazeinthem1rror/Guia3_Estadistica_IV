@@ -43,4 +43,36 @@ frq(CEP$confianza_6_i)
 frq(CEP$confianza_6_k)
 
 #Recodificacion de variables----------------------------------------------------
+#Ver NA
+table(CEP$interes_pol_1_b, exclude = F)
+table(CEP$confianza_6_c, exclude = F)
+table(CEP$confianza_6_d, exclude = F)
+table(CEP$confianza_6_h, exclude = F)
+table(CEP$confianza_6_i, exclude = F)
+table(CEP$confianza_6_k, exclude = F)
+#Eliminar NA
+CEP <- CEP %>%
+  select(confianza_6_c, confianza_6_d, confianza_6_h, confianza_6_i, confianza_6_k,
+         interes_pol_1_b)  %>%
+  mutate_all(., ~(as.numeric(.))) %>%
+  mutate_all(.,~case_when(.==88 | .==99 ~ NA_real_, TRUE ~ .))
 
+CEP <- CEP %>%
+  drop_na()
+dim(CEP) #1361 obs
+
+#Analisis descriptivos----------------------------------------------------------
+table1(~ . ,
+       data = CEP)
+
+#Evaluacion de supuestos--------------------------------------------------------
+skewness(CEP,na.rm=T) #recomendable valores entre -2 y +2
+kurtosis(CEP,na.rm=T) #recomendable valores entre -2 y +2
+
+#Histogramas
+hist(CEP$interes_pol_1_b)
+hist(CEP$confianza_6_c)
+hist(CEP$confianza_6_d)
+hist(CEP$confianza_6_h)
+hist(CEP$confianza_6_i)
+hist(CEP$confianza_6_k)
