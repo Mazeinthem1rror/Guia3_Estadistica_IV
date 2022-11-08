@@ -138,3 +138,4 @@ PCA_scores <- principal(CEP, #la data
 
 CEP<- cbind(CEP, PCA_scores$scores)
 names(CEP)
+hola
