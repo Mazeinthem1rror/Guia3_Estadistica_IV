@@ -51,35 +51,35 @@ table(CEP$confianza_6_h, exclude = F)
 table(CEP$confianza_6_i, exclude = F)
 table(CEP$confianza_6_k, exclude = F)
 #Eliminar NA
-CEP<- CEP %>%
+CEP_<- CEP %>%
   select(confianza_6_c, confianza_6_d, confianza_6_h, confianza_6_i, confianza_6_k,
          interes_pol_1_b)  %>%
   mutate_all(., ~(as.numeric(.))) %>%
   mutate_all(.,~case_when(.==88 | .==99 ~ NA_real_, TRUE ~ .))
-CEP <- CEP %>%
+CEP_ <- CEP %>%
   drop_na()
 dim(CEP) #1361 obs
 
 #Analisis descriptivos----------------------------------------------------------
 table1(~ . ,
-       data = CEP)
+       data = CEP_)
 
 #Evaluacion de supuestos--------------------------------------------------------
-skewness(CEP,na.rm=T) #recomendable valores entre -2 y +2
-kurtosis(CEP,na.rm=T) #recomendable valores entre -2 y +2
+skewness(CEP_,na.rm=T) #recomendable valores entre -2 y +2
+kurtosis(CEP_,na.rm=T) #recomendable valores entre -2 y +2
 
 #Histogramas
-hist(CEP$interes_pol_1_b)
-hist(CEP$confianza_6_c)
-hist(CEP$confianza_6_d)
-hist(CEP$confianza_6_h)
-hist(CEP$confianza_6_i)
-hist(CEP$confianza_6_k)
+hist(CEP_$interes_pol_1_b)
+hist(CEP_$confianza_6_c)
+hist(CEP_$confianza_6_d)
+hist(CEP_$confianza_6_h)
+hist(CEP_$confianza_6_i)
+hist(CEP_$confianza_6_k)
 
-#Shapiro-Wilk
-shapiro.test(CEP$interes_pol_1_b) 
-#Kolmogorov-Smirnov
-ks.test(CEP$interes_pol_1_b, "pnorm") #rechazo H0, es decir, no puedo asegurar una distribución normal
+#Shapiro-Wilk #Preguntar evaluar prueba de hipotesis
+shapiro.test(CEP_$interes_pol_1_b) 
+#Kolmogorov-Smirnov #reportar 
+ks.test(CEP_$interes_pol_1_b, "pnorm") #rechazo H0, es decir, no puedo asegurar una distribución normal
 ks.test(CEP$confianza_6_c, "pnorm") 
 ks.test(CEP$confianza_6_d, "pnorm") 
 ks.test(CEP$confianza_6_h, "pnorm") 
@@ -87,55 +87,49 @@ ks.test(CEP$confianza_6_i, "pnorm")
 ks.test(CEP$confianza_6_k, "pnorm") 
 
 #Correlacion lineal entre variables---------------------------------------------
-cor_CEP<- cor(CEP)
+cor_CEP<- cor(CEP_)
 print(cor_CEP)
 
 #Determinar matriz de correlacion
-det(cor(CEP)) #0,3026475
+det(cor(CEP_)) #0,3026475
 
 #Prueba de esfericidad barlett
-cortest.bartlett(CEP)
+cortest.bartlett(CEP_)
+
+
 
 #Prueba KMO
-KMO(CEP)
+KMO(CEP_)
 
 #Analisis de componentes principales--------------------------------------------
 #Numero de componentes
-PCA <- principal(CEP, #la data
-                 nfactors = 6, #n componentes=n de variables
-                 rotate = "none") #esto lo vamos a profundizar la próxima cápsula
+PCA <- principal(CEP_, 
+                 nfactors = 6,
+                 rotate = "none")
 PCA
 
 #Gráfico de Cattell
-plot(princomp(CEP, scores=T,cor=T), type="lines")
+plot(princomp(CEP_, scores=T,cor=T), type="lines")
 
 #Apartir de lo mostrado por el grafico de cattell, hemos decidido quedarnos con el
 #primer componente. 
 
 #Rotacion-----------------------------------------------------------------------
-#varimax
-PCA_varimax <- principal(CEP, #la data
-                         nfactors = 1, #n componentes=componentes seleccionados
-                         rotate = "varimax") #rotación
-PCA_varimax
-
 
 #Oblimin
 PCA_oblimin <- principal(CEP, #la data
-                         nfactors = 1, #n componentes=componentes seleccionados
-                         rotate = "oblimin") #rotación
+                         nfactors = 1, 
+                         rotate = "oblimin") 
 PCA_oblimin
 
 #Para  ordenar los resultados
 print.psych(PCA_oblimin, cut = 0.3, sort = TRUE)
 
 #Guardar puntuacion------------------------------------------------------------
-PCA_scores <- principal(CEP, #la data
-                        nfactors = 1, #n componentes=componentes seleccionados
-                        rotate = "oblimin", #rotación
-                        scores=T, #se generan las puntuaciones
-                        method="regression")  #el método para generar puntuaciones
-
+PCA_scores <- principal(CEP, 
+                        nfactors = 1, 
+                        rotate = "oblimin",
+                        scores=T, 
+                        method="regression") 
 CEP<- cbind(CEP, PCA_scores$scores)
 names(CEP)
-hola
