@@ -24,7 +24,7 @@ head(CEP)
 #una de ellas? PARTIDOS POLITICOS.
 #confianza_6_d: A continuacion, le voy a leer los nombres de algunas instituciones.
 #De acuerdo con las alternativas de la tarjeta,¿Cuanta confianza tiene Ud. en cada
-#una de ellas? TRIBUNALES DE JUSTICIA.
+#una de ellas? FUERZAS ARMADAS.
 #confianza_6_h: A continuacion, le voy a leer los nombres de algunas instituciones.
 #De acuerdo con las alternativas de la tarjeta,¿Cuanta confianza tiene Ud. en cada
 #una de ellas? CARABINEROS.
@@ -117,7 +117,7 @@ plot(princomp(CEP_, scores=T,cor=T), type="lines")
 #Rotacion-----------------------------------------------------------------------
 
 #Oblimin
-PCA_oblimin <- principal(CEP, #la data
+PCA_oblimin <- principal(CEP_, #la data
                          nfactors = 1, 
                          rotate = "oblimin") 
 PCA_oblimin
@@ -126,7 +126,7 @@ PCA_oblimin
 print.psych(PCA_oblimin, cut = 0.3, sort = TRUE)
 
 #Guardar puntuacion------------------------------------------------------------
-PCA_scores <- principal(CEP, 
+PCA_scores <- principal(CEP_, 
                         nfactors = 1, 
                         rotate = "oblimin",
                         scores=T, 
